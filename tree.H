@@ -2,6 +2,7 @@
 #define INCLUDED_TREE_H
 
 #include "candidates.H"
+#include <map>
 
 struct Edge : public CandidateList {
   inline Edge (unsigned head, unsigned C, unsigned R)
