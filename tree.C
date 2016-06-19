@@ -35,3 +35,14 @@ void Tree::compute_candidates(Node& n)
   }
 }
 
+void Tree::search(std::map< unsigned, unsigned > output, unsigned int n_id, unsigned c_id) const
+{
+  const Node &n = at(n_id);
+  const SolutionCandidate &s = n.at(c_id);
+  if (s.b != 0) {
+    output.emplace(n_id, s.b);
+    for (unsigned i = 0; i < s.used.size(); i++) {
+      search(output, n.outgoing.at(i).head, s.used.at(i));
+    }
+  }
+}

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <map>
 
 #include "candidates.H"
 #include "tree.H"
@@ -28,6 +29,11 @@ int main (int argc, char **argv) {
   std::sort(&t.library.front(), &t.library.front()+x[2]);
 
   t.compute_candidates(t.root);
-  // print
+  std::map<unsigned, unsigned> buffers_used;
+  t.search(buffers_used, 0, t.front().size()-1);
+  std::cout << t.root.back().rat << " " << buffers_used.size() << std::endl;
+  for (const auto &pair : buffers_used) {
+    std::cout << pair.first << " " << pair.second << std::endl;
+  }
   return 0;
 }
