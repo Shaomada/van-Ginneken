@@ -14,22 +14,29 @@ void CandidateList::add(const SolutionCandidate& s)
 
 void CandidateList::buffer(const CandidateList& e, const std::vector<Buffer> &l)
 {
-  // consider all buffered and unbuffered SolutionCandidates ascending by C
-  const SolutionCandidate &t = e.back();
+  // consider candidates and buffers ascending by capacity
   typename CandidateList::const_iterator it = e.begin();
-  for (unsigned i = 0; i < l.size(); i++) {
-    SolutionCandidate s(i+1, l.at(i).C, s.rat - l.at(i).R*t.C, t.used);
+  for (const Buffer &b : l) {
+    // find the optimal candidate t to buffer with b and call the buffered version s
+    SolutionCandidate s(1 + &b - &l.front(), b.C, -std::numeric_limits<double>::infinity(), std::vector<unsigned>());
+    for (const SolutionCandidate &t : e) {
+      double rat = t.rat - b.R*t.C;
+      if (rat > s.rat) {
+        s.rat = rat;
+        s.used = t.used;
+      }
+    }
     while (it != e.end() && it->C < s.C) {
       add(*it++);
     }
-    if (it != e.end() && it->C == s.C) { // special case
+    if (it != e.end() && it->C == s.C) { // special case use better for equal capacity take better one
       if (it->rat < s.rat) {
         add(s);
         it++;
       } else {
         add(*it++);
       }
-    } else { // normal case
+    } else { // normal case use s unless it's allready dominated
       add(s);
     }
   }
