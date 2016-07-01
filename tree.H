@@ -23,7 +23,7 @@ struct Tree : std::vector<Node> {
   Tree (unsigned n) : std::vector<Node>(n), root (0, 0, 1), library() { }
   void compute_candidates (Edge &e);
   void compute_candidates(Node &n);
-  void search(std::map<unsigned, unsigned> output, unsigned n_id, unsigned c_id) const;
+  void search(std::map<unsigned, unsigned> &output, unsigned n_id, unsigned c_id) const;
   
   Edge root;
   std::vector<Buffer> library;
